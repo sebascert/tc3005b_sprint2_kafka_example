@@ -1,3 +1,6 @@
 /kafka/
 /.consumer.pid
 /.producer.pid
+
+*.mermaid.png
+*.mermaid.svg
