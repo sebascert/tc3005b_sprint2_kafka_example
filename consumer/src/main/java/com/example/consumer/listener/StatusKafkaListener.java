@@ -17,7 +17,7 @@ public class StatusKafkaListener {
   @KafkaListener(
       topicPartitions = {
         @org.springframework.kafka.annotation.TopicPartition(
-            topic = "patient-status-topic",
+            topic = "${app.kafka.topics.status}",
             partitions = {"0", "1"})
       },
       containerFactory = "statusKafkaListenerContainerFactory")

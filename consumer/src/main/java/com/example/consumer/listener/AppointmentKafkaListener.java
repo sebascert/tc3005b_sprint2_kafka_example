@@ -17,7 +17,7 @@ public class AppointmentKafkaListener {
   @KafkaListener(
       topicPartitions = {
         @org.springframework.kafka.annotation.TopicPartition(
-            topic = "appointments-topic",
+            topic = "${app.kafka.topics.appointments}",
             partitions = {"0", "1", "2"})
       },
       containerFactory = "appointmentKafkaListenerContainerFactory")

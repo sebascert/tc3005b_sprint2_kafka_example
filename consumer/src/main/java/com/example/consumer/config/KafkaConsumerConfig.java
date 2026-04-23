@@ -27,8 +27,6 @@ public class KafkaConsumerConfig {
   private Map<String, Object> baseConsumerProps() {
     Map<String, Object> props = new HashMap<>(kafkaProperties.buildConsumerProperties());
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-    props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
     return props;
   }
 
@@ -36,6 +34,7 @@ public class KafkaConsumerConfig {
   public ConsumerFactory<String, PatientEvent> patientEventConsumerFactory() {
     JsonDeserializer<PatientEvent> deserializer = new JsonDeserializer<>(PatientEvent.class);
     deserializer.addTrustedPackages("*");
+    deserializer.setUseTypeHeaders(false);
     return new DefaultKafkaConsumerFactory<>(
         baseConsumerProps(), new StringDeserializer(), deserializer);
   }
@@ -54,6 +53,7 @@ public class KafkaConsumerConfig {
     JsonDeserializer<AppointmentEvent> deserializer =
         new JsonDeserializer<>(AppointmentEvent.class);
     deserializer.addTrustedPackages("*");
+    deserializer.setUseTypeHeaders(false);
     return new DefaultKafkaConsumerFactory<>(
         baseConsumerProps(), new StringDeserializer(), deserializer);
   }
@@ -72,6 +72,7 @@ public class KafkaConsumerConfig {
     JsonDeserializer<PatientStatusEvent> deserializer =
         new JsonDeserializer<>(PatientStatusEvent.class);
     deserializer.addTrustedPackages("*");
+    deserializer.setUseTypeHeaders(false);
     return new DefaultKafkaConsumerFactory<>(
         baseConsumerProps(), new StringDeserializer(), deserializer);
   }

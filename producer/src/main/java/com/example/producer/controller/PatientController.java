@@ -3,6 +3,7 @@ package com.example.producer.controller;
 import com.example.producer.dto.PatientEvent;
 import com.example.producer.service.KafkaProducerService;
 import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
 
   private final KafkaProducerService producer;
+
+  @Value("${app.kafka.topics.patients}")
+  private String patientsTopic;
 
   public PatientController(KafkaProducerService producer) {
     this.producer = producer;
@@ -19,9 +23,7 @@ public class PatientController {
   public String createPatient(@RequestBody PatientEvent event) {
     event.setEventType("REGISTER");
     event.setTimestamp(LocalDateTime.now().toString());
-
-    producer.sendMessage("patients-topic", 0, event.getPatientId().toString(), event);
-
+    producer.sendMessage(patientsTopic, 0, event.getPatientId().toString(), event);
     return "Patient registration sent to Kafka";
   }
 
@@ -30,9 +32,7 @@ public class PatientController {
     event.setPatientId(id);
     event.setEventType("UPDATE");
     event.setTimestamp(LocalDateTime.now().toString());
-
-    producer.sendMessage("patients-topic", 1, event.getPatientId().toString(), event);
-
+    producer.sendMessage(patientsTopic, 1, event.getPatientId().toString(), event);
     return "Patient update sent to Kafka";
   }
 
@@ -42,9 +42,7 @@ public class PatientController {
     event.setEventType("DELETE");
     event.setPatientId(id);
     event.setTimestamp(LocalDateTime.now().toString());
-
-    producer.sendMessage("patients-topic", 2, id.toString(), event);
-
+    producer.sendMessage(patientsTopic, 2, id.toString(), event);
     return "Patient delete sent to Kafka";
   }
 }
