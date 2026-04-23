@@ -38,6 +38,9 @@ echo "CREATING TOPICS"
 "$KAFKA_BIN/kafka-topics.sh" --create --topic patient-status-topic \
     --bootstrap-server localhost:9092 --partitions 2 --replication-factor 1 || true
 
+"$KAFKA_BIN/kafka-topics.sh" --create --topic patient-status-reply-topic \
+    --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1 || true
+
 echo "STARTING CONSUMER"
 (
     cd "$SCRIPT_DIR/consumer"
