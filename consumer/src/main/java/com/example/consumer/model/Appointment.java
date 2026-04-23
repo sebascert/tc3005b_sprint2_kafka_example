@@ -1,7 +1,13 @@
 package com.example.consumer.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Appointment {
-  private Long appointmentId;
+
+  @Id private Long appointmentId;
+
   private Long patientId;
   private String doctorName;
   private String dateTime;

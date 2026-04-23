@@ -7,6 +7,7 @@ import com.example.consumer.model.PatientView;
 import com.example.consumer.repository.AppointmentRepository;
 import com.example.consumer.repository.PatientRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,11 +35,11 @@ public class StatusConsumerService {
   }
 
   private void handleStatusQuery(PatientStatusEvent event) {
-    Patient patient = patientRepository.findById(event.getPatientId());
+    Optional<Patient> patientOptional = patientRepository.findById(event.getPatientId());
     List<Appointment> appointments = appointmentRepository.findByPatientId(event.getPatientId());
 
     String summary =
-        patient == null
+        patientOptional.isEmpty()
             ? "Patient not found"
             : "Patient found. Current appointments: " + appointments.size();
 
@@ -52,8 +53,10 @@ public class StatusConsumerService {
   }
 
   public PatientView getPatientStatus(Long patientId) {
-    Patient patient = patientRepository.findById(patientId);
+    Optional<Patient> patientOptional = patientRepository.findById(patientId);
     List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+
+    Patient patient = patientOptional.orElse(null);
 
     String summary =
         patient == null

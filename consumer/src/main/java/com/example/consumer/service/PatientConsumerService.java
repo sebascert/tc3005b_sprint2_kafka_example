@@ -3,6 +3,7 @@ package com.example.consumer.service;
 import com.example.consumer.dto.PatientEvent;
 import com.example.consumer.model.Patient;
 import com.example.consumer.repository.PatientRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,12 +36,10 @@ public class PatientConsumerService {
   }
 
   private void update(PatientEvent event) {
-    Patient existing = patientRepository.findById(event.getPatientId());
-    if (existing == null) {
-      existing = new Patient();
-      existing.setId(event.getPatientId());
-    }
+    Optional<Patient> existingOptional = patientRepository.findById(event.getPatientId());
+    Patient existing = existingOptional.orElseGet(Patient::new);
 
+    existing.setId(event.getPatientId());
     existing.setName(event.getName());
     existing.setAge(event.getAge());
     existing.setLastUpdated(event.getTimestamp());
